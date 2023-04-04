@@ -9,15 +9,21 @@ const todoProto = grpc.loadPackageDefinition(packageDefinition).todo;
 const client = new todoProto.TodoService('localhost:50051', grpc.credentials.createInsecure());
 
 function listTodos() {
-    const call = client.getTodoList({});
-    call.on('data', (todoList) => {
+    const call = client.getTodoList({}, (err, todoList) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
         console.log(todoList);
     });
 }
 
 function getTodoById(todoId) {
-    const call = client.getTodoById({id: todoId});
-    call.on('data', (todo) => {
+    const call = client.getTodoById({id: todoId}, (err, todo) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
         console.log(todo);
     });
 }
@@ -48,8 +54,11 @@ function updateTodo() {
 }
 
 function deleteTodoById(todoId) {
-    const call = client.deleteTodoById({id: todoId});
-    call.on('data', (deletedTodo) => {
+    const call = client.deleteTodoById({id: todoId}, (err, deletedTodo) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
         console.log(deletedTodo);
     });
 }
